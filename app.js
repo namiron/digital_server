@@ -8,6 +8,7 @@ const path = require("path");
 const clientUrl = process.env.CLIENT_URL;
 const indexRouter = require("./routes/home.routes");
 const usersRouter = require("./routes/users.routes");
+const laureatesRouter = require("./routes/laureates.routes");
 
 const app = express();
 
@@ -26,5 +27,6 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 app.use("/", indexRouter);
 app.use("/auth", usersRouter);
+app.use("/api", laureatesRouter);
 
 module.exports = app;

@@ -10,10 +10,5 @@ router.post("/register", register);
 
 //http://localhost:4000/auth/current
 router.get("/current", auth, current);
-module.exports = router;
 
-// {
-// 	"name": "Alx",
-//     "email":"alxlxa@gmai.com",
-//     "password":"12345Alx"
-// }
+module.exports = router;

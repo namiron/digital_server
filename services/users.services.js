@@ -1,20 +1,7 @@
-const fs = require("fs/promises");
-const path = require("path");
 const bcrypt = require("bcrypt");
+const { readUsers, writeUsers } = require("../controllers/users.controllers");
 const jwt = require("jsonwebtoken");
-
-const USERS_DB_PATH = path.join(__dirname, "../db/users.json");
 const jwt_token = process.env.JWT_SECRET;
-
-const readUsers = async () => {
-  const data = await fs.readFile(USERS_DB_PATH, "utf-8");
-  return JSON.parse(data).users;
-};
-
-const writeUsers = async (users) => {
-  const data = JSON.stringify({ users }, null, 2);
-  await fs.writeFile(USERS_DB_PATH, data);
-};
 
 const register = async (req, res) => {
   try {
@@ -53,14 +40,7 @@ const register = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 86400000,
-    });
-
-    res.status(201).json({ id: newUser.id, email: newUser.email, name: newUser.name, token: jwt_token });
+    res.status(201).json({ id: newUser.id, email: newUser.email, name: newUser.name, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error during register" });
@@ -96,13 +76,6 @@ const login = async (req, res) => {
       jwt_token,
       { expiresIn: "1d" }
     );
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 86400000,
-    });
 
     res.status(201).json({ id: user.id, email: user.email, name: user.name, token });
   } catch (error) {

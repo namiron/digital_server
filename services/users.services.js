@@ -64,7 +64,7 @@ const login = async (req, res) => {
     const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
     if (!isPasswordCorrect) {
-      return res.status(404).json({ message: "password is not correct" });
+      return res.status(401).json({ message: "password is not correct" });
     }
 
     const token = jwt.sign(
@@ -77,7 +77,7 @@ const login = async (req, res) => {
       { expiresIn: "1d" }
     );
 
-    res.status(201).json({ id: user.id, email: user.email, name: user.name, token });
+    res.status(200).json({ id: user.id, email: user.email, name: user.name, token });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Error during login" });

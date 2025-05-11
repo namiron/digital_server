@@ -1,6 +1,22 @@
 Server for React Native Client App
 This is a server for a React Native client application that provides an API for authorization, getting categories of laureates and their data. The server sends requests to remote resources, receives data and saves it locally in the db folder.
 
+laureates.controllers.js
+
+const fetchLaureatesData = async () => {
+  try {
+    const response = await axios.get(LAUREATES_URL);
+    const data = await response.data;
+    fs.writeFileSync(laureatesFilePath, JSON.stringify(data, null, 2));
+    return data.laureates;
+  } catch (error) {
+    console.error("Error fetching data from API:", error);
+    throw error;
+  }
+};
+
+
+
 Features
 Routes:
 
